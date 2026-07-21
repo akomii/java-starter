@@ -1,0 +1,44 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: "*.java"
+      run: ./mvnw -q spotless:apply
+      stage_fixed: true
+    gitleaks:
+      run: |
+        if command -v gitleaks >/dev/null 2>&1; then
+          gitleaks git --pre-commit --redact --staged --verbose
+        else
+          echo "gitleaks not installed, skipping secret scan"
+        fi
+
+commit-msg:
+  commands:
+    conventional:
+      run: |
+        header=$(grep -v '^#' "{1}" | awk 'NF {print; exit}')
+        [ -z "$header" ] && exit 0
+        case "$header" in
+          "Merge "*|"Revert "*|"fixup!"*|"squash!"*) exit 0 ;;
+        esac
+        fail() {
+          echo "Invalid commit message header:" >&2
+          echo >&2
+          echo "  $header" >&2
+          echo >&2
+          echo "  - $1" >&2
+          echo >&2
+          echo "Format : <type>(<optional scope>): <subject>" >&2
+          echo "Types  : feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert" >&2
+          echo "Example: feat(api): add request validation" >&2
+          exit 1
+        }
+        [ ${#header} -le 100 ] || fail "header is ${#header} chars; keep it <= 100"
+        printf '%s' "$header" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\([^)]+\))?!?: [^A-Z].*[^.]$' \
+          || fail "must match 'type(scope): subject', lowercase subject, no trailing period"
+
+pre-push:
+  commands:
+    verify:
+      run: ./mvnw -B verify
