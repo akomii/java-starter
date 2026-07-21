@@ -26,6 +26,7 @@
   <build>
     <finalName>${project.parent.artifactId}-${project.version}</finalName>
     <plugins>
+      <!-- Repackages the module jar as an executable Boot jar during package. -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

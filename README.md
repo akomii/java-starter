@@ -37,16 +37,30 @@ attestations).
 
 ## Getting started
 
+Prerequisites: Java 21 on PATH (Maven comes through the wrapper) and the
+[lefthook](https://lefthook.dev) binary for the git hooks (`apt install lefthook`,
+`brew install lefthook`, or a release download).
+
 ```sh
 ./mvnw verify                    # full gate: format check, checkstyle, tests + coverage, build
 ./mvnw spotless:apply            # format
 ./mvnw test                      # unit tests
 ./mvnw -pl app spring-boot:run   # run the app
-lefthook install                 # git hooks (one-time, needs the lefthook binary)
+lefthook install                 # git hooks (one-time)
 ```
 
-Commits must follow [Conventional Commits](https://www.conventionalcommits.org)
-(enforced on commit). Cut a release by pushing a `vX.Y.Z` tag.
+The coverage report lands in `app/target/site/jacoco/index.html`.
+
+Commits must follow [Conventional Commits](https://www.conventionalcommits.org),
+enforced by the commit-msg hook:
+
+```
+<type>(<optional scope>): <subject>
+```
+
+Allowed types are `feat fix docs style refactor perf test chore ci build revert`,
+the subject starts lowercase and has no trailing period, the header stays at
+most 100 characters. Cut a release by pushing a `vX.Y.Z` tag.
 
 ## Repository settings
 

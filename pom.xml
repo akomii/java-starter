@@ -41,6 +41,7 @@
 
   <build>
     <plugins>
+      <!-- Fails the build on Java older than 21 or Maven older than 3.9. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
@@ -64,6 +65,7 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Formatter of record. Checked at validate, fixed with ./mvnw spotless:apply. -->
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
@@ -85,6 +87,7 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Correctness and naming rules from checkstyle.xml. Formatting belongs to Spotless. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -110,6 +113,7 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Coverage agent, report at test and an 80 percent line gate at verify. Boot entry point excluded. -->
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
