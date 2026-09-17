@@ -27,7 +27,7 @@ Maven multi-module (Java 21, `mvnw` pinned), Spring Boot app module, Spotless wi
 
 ## Getting started
 
-Prerequisites: Java 21 on PATH (Maven comes through the wrapper) and the [lefthook](https://lefthook.dev) binary for the git hooks (`apt install lefthook`, `brew install lefthook`, or a release download).
+Prerequisites: Java 21 on PATH (Maven comes through the wrapper) and the [lefthook](https://lefthook.dev) binary for the git hooks (`apt install lefthook`, `brew install lefthook`, or a release download). The shared git hooks are Python scripts and need `python3` on PATH.
 
 ```sh
 ./mvnw verify                    # full gate: format check, checkstyle, tests + coverage, build
@@ -45,7 +45,7 @@ Commits must follow [Conventional Commits](https://www.conventionalcommits.org),
 <type>(<optional scope>): <subject>
 ```
 
-Allowed types are `feat fix docs style refactor perf test chore ci build revert`, the subject starts lowercase and has no trailing period, the header stays at most 100 characters. Cut a release by pushing a `vX.Y.Z` tag.
+Allowed types are `feat fix docs style refactor perf test chore`, the subject starts lowercase and has no trailing period, the header stays at most 100 characters. Cut a release by pushing a `vX.Y.Z` tag.
 
 ## Repository settings
 
@@ -76,7 +76,7 @@ Generating a repo from a template copies files and branches only, never settings
 | Spotless                 | palantir-java-format, `check` bound to the build, `apply` in the pre-commit hook                                                                        | One formatter of record                                                            |
 | Checkstyle               | Correctness and naming rules only, no formatting rules                                                                                                  | Never fights the formatter                                                         |
 | JUnit 5 + JaCoCo         | 80% line gate on `verify`, Boot entry point excluded                                                                                                    | Regressions surface locally and in CI                                              |
-| lefthook                 | pre-commit formats staged files and runs gitleaks when installed, commit-msg enforces Conventional Commits via shell check, pre-push runs `mvnw verify` | Catch problems locally, keep history parseable for the changelog                   |
+| lefthook                 | pre-commit formats staged files, runs gitleaks when installed and the shared hooks from aktin-github-scripts (data files, large files, commit size), commit-msg enforces Conventional Commits via the shared hook, pre-push runs `mvnw verify` | Catch problems locally, keep history parseable for the changelog                   |
 | CI                       | `ci.yml` calls the reusable `verify.yml` on push and PR, cancels superseded runs, least-privilege token                                                 | Fast, safe feedback                                                                |
 | Security scans           | CodeQL, dependency-review, OpenSSF Scorecard, secret scanning, all surfaced in the Security tab                                                         | Catch code and supply-chain issues early                                           |
 | Releases                 | Tag `vX.Y.Z` triggers git-cliff changelog and notes, revision bump committed back, CycloneDX SBOM, SLSA attestations, Boot jar attached to the Release  | Reproducible, auditable releases from commit history                               |

@@ -10,6 +10,10 @@ Java 21 and the committed Maven wrapper (`./mvnw`). Git hooks are managed by
 lefthook install
 ```
 
+The shared git hooks are Python scripts and need `python3` on PATH. They are
+pulled from the repository configured under `remotes` in `lefthook.yml`, change
+`git_url` and `ref` there to use another source.
+
 ## Development
 
 ```sh
@@ -22,7 +26,8 @@ lefthook install
 ## Commits
 
 Messages follow [Conventional Commits](https://www.conventionalcommits.org),
-enforced by a shell check in the `commit-msg` hook.
+enforced by the shared `commit-msg` hook from
+[aktin-github-scripts](https://github.com/aktin/aktin-github-scripts).
 
 ## Pull requests
 
