@@ -4,7 +4,7 @@
   "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <!-- Correctness and naming rules only. Formatting belongs to Spotless
-     (palantir-java-format), so no whitespace, indentation, or line-length
+     (Eclipse formatter, see eclipse-formatter.xml), so no whitespace, indentation, or line-length
      rules live here. -->
 <module name="Checker">
   <property name="severity" value="error"/>

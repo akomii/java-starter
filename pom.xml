@@ -32,7 +32,6 @@
     <revision>0.0.0</revision>
     <java.version>21</java.version>
     <spotless.version>3.8.0</spotless.version>
-    <palantir-java-format.version>2.96.0</palantir-java-format.version>
     <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
     <checkstyle.version>13.8.0</checkstyle.version>
     <jacoco.version>0.8.15</jacoco.version>
@@ -72,9 +71,9 @@
         <version>${spotless.version}</version>
         <configuration>
           <java>
-            <palantirJavaFormat>
-              <version>${palantir-java-format.version}</version>
-            </palantirJavaFormat>
+            <eclipse>
+              <file>${maven.multiModuleProjectDirectory}/eclipse-formatter.xml</file>
+            </eclipse>
           </java>
         </configuration>
         <executions>

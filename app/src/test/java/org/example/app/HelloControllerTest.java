@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 class HelloControllerTest {
 
-    @Test
-    void helloReturnsGreeting() {
-        assertEquals("Hello, world!", new HelloController().hello());
-    }
+  @Test
+  void helloReturnsGreeting() {
+    assertEquals("Hello, world!", new HelloController().hello());
+  }
 }

@@ -23,7 +23,7 @@
 
 ## Stack
 
-Maven multi-module (Java 21, `mvnw` pinned), Spring Boot app module, Spotless with palantir-java-format, Checkstyle, JUnit 5 with a JaCoCo coverage gate, lefthook hooks, tag-driven releases via git-cliff, and a hardened GitHub Actions pipeline (CI, CodeQL, Scorecard, dependency review, SBOM, build attestations).
+Maven multi-module (Java 21, `mvnw` pinned), Spring Boot app module, Spotless with the Eclipse formatter, Checkstyle, JUnit 5 with a JaCoCo coverage gate, lefthook hooks, tag-driven releases via git-cliff, and a hardened GitHub Actions pipeline (CI, CodeQL, Scorecard, dependency review, SBOM, build attestations).
 
 ## Getting started
 
@@ -73,10 +73,10 @@ Generating a repo from a template copies files and branches only, never settings
 | Maven multi-module       | Parent pom + `app` module, add modules via `<module>` entries                                                                                           | Shared plugin config, room for libs later                                          |
 | mvnw wrapper             | Maven version pinned in `.mvn/wrapper/maven-wrapper.properties`                                                                                         | Same build tool locally and in CI                                                  |
 | `${revision}` versioning | Single version property in the parent pom                                                                                                               | Release bumps one line instead of every pom                                        |
-| Spotless                 | palantir-java-format, `check` bound to the build, `apply` in the pre-commit hook                                                                        | One formatter of record                                                            |
+| Spotless                 | Eclipse formatter (`eclipse-formatter.xml`: 2-space indent, 150 columns), `check` bound to the build, `apply` in the pre-commit hook                                                                        | One formatter of record                                                            |
 | Checkstyle               | Correctness and naming rules only, no formatting rules                                                                                                  | Never fights the formatter                                                         |
 | JUnit 5 + JaCoCo         | 80% line gate on `verify`, Boot entry point excluded                                                                                                    | Regressions surface locally and in CI                                              |
-| lefthook                 | pre-commit formats staged files, runs gitleaks when installed and the shared hooks from aktin-github-scripts (data files, large files, commit size), commit-msg enforces Conventional Commits via the shared hook, pre-push runs `mvnw verify` | Catch problems locally, keep history parseable for the changelog                   |
+| lefthook                 | pre-commit formats and lints staged files, runs gitleaks when installed and the shared hooks from aktin-github-scripts (data files, large files, commit size), commit-msg enforces Conventional Commits via the shared hook, pre-push runs `mvnw verify` | Catch problems locally, keep history parseable for the changelog                   |
 | CI                       | `ci.yml` calls the reusable `verify.yml` on push and PR, cancels superseded runs, least-privilege token                                                 | Fast, safe feedback                                                                |
 | Security scans           | CodeQL, dependency-review, OpenSSF Scorecard, secret scanning, all surfaced in the Security tab                                                         | Catch code and supply-chain issues early                                           |
 | Releases                 | Tag `vX.Y.Z` triggers git-cliff changelog and notes, revision bump committed back, CycloneDX SBOM, SLSA attestations, Boot jar attached to the Release  | Reproducible, auditable releases from commit history                               |
@@ -86,8 +86,9 @@ Generating a repo from a template copies files and branches only, never settings
 ## Project structure
 
 ```
-app/                Spring Boot application module (package renamed by init.sh)
-.github/workflows/  CI, CodeQL, Scorecard, dependency-review, release
-checkstyle.xml      correctness rules (formatting lives in Spotless)
-scripts/init.sh     one-time template initializer (removed after first run)
+app/                   Spring Boot application module (package renamed by init.sh)
+.github/workflows/     CI, CodeQL, Scorecard, dependency-review, release
+checkstyle.xml         correctness rules (formatting lives in Spotless)
+eclipse-formatter.xml  Spotless formatter settings (2-space indent, 150 columns)
+scripts/init.sh        one-time template initializer (removed after first run)
 ```
