@@ -36,5 +36,5 @@ Make sure `./mvnw verify` passes. The pre-push hook runs it as well.
 ## Releases
 
 Push a `vX.Y.Z` tag. The release workflow builds the Boot jar, generates the
-changelog and notes, produces an SBOM and attestations, and publishes the
+release notes, produces an SBOM and attestations, and publishes the
 GitHub Release.
