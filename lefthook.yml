@@ -14,8 +14,11 @@ pre-commit:
   commands:
     format:
       glob: "*.java"
-      run: ./mvnw -q spotless:apply
+      run: ./mvnw -q spotless:apply -DspotlessFiles="$(printf '.*/%s,' {staged_files} | sed 's/,$//')"
       stage_fixed: true
+    lint:
+      glob: "*.java"
+      run: ./mvnw -q checkstyle:check -Dcheckstyle.includes="$(for f in {staged_files}; do printf '**/%s,' "$(basename "$f")"; done | sed 's/,$//')"
     gitleaks:
       run: |
         if command -v gitleaks >/dev/null 2>&1; then
