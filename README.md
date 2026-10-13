@@ -90,5 +90,6 @@ app/                   Spring Boot application module (package renamed by init.s
 .github/workflows/     CI, CodeQL, Scorecard, dependency-review, release
 checkstyle.xml         correctness rules (formatting lives in Spotless)
 eclipse-formatter.xml  Spotless formatter settings (2-space indent, 150 columns)
+SECURITY.md             how to report a vulnerability
 scripts/init.sh        one-time template initializer (removed after first run)
 ```
