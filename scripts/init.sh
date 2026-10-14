@@ -36,7 +36,7 @@ dist=$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-z0-9._-]
 pkg=$(printf '%s' "$dist" | tr -cd 'a-z0-9_')
 group_path=$(printf '%s' "$group" | tr '.' '/')
 
-for file in pom.xml app/pom.xml README.md NOTICE SECURITY.md .github/CODEOWNERS; do
+for file in pom.xml app/pom.xml README.md NOTICE .github/CODEOWNERS; do
   [ -f "$file" ] || continue
   sed -i \
     -e "s|{{PROJECT_NAME}}|$(esc "$name")|g" \
