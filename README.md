@@ -27,7 +27,7 @@ Maven multi-module (Java 25, `mvnw` pinned), Spring Boot app module, Spotless wi
 
 ## Getting started
 
-Prerequisites: Java 25 on PATH (Maven comes through the wrapper) and the [lefthook](https://lefthook.dev) binary for the git hooks (`apt install lefthook`, `brew install lefthook`, or a release download). The shared git hooks are Python scripts and need `python3` on PATH.
+Prerequisites: Java 25 on PATH (Maven comes through the wrapper) and the [lefthook](https://lefthook.dev) binary for the git hooks (`apt install lefthook`, `brew install lefthook`, or a release download). The shared git hooks need `python3`, `gitleaks`, `actionlint`, `hadolint` and `shellcheck` on PATH. A missing tool fails the commit, hadolint and shellcheck are only called when a Dockerfile or shell script is staged.
 
 ```sh
 ./mvnw verify                    # full gate: format check, checkstyle, tests + coverage, build
@@ -77,7 +77,7 @@ Generating a repo from a template copies files and branches only, never settings
 | Spotless                 | Eclipse formatter (`eclipse-formatter.xml`: 2-space indent, 150 columns), `check` bound to the build, `apply` in the pre-commit hook                                                                        | One formatter of record                                                            |
 | Checkstyle               | Correctness and naming rules only, no formatting rules                                                                                                  | Never fights the formatter                                                         |
 | JUnit 5 + JaCoCo         | 80% line gate on `verify`, Boot entry point excluded                                                                                                    | Regressions surface locally and in CI                                              |
-| lefthook                 | pre-commit formats and lints staged files, runs gitleaks when installed and the shared hooks from aktin-github-scripts (data files, large files, commit size), commit-msg enforces Conventional Commits via the shared hook, pre-push runs `mvnw verify` | Catch problems locally, keep history parseable for the changelog                   |
+| lefthook                 | All hooks come from aktin-github-scripts. pre-commit formats and lints staged Java files, scans for secrets with gitleaks, lints staged workflows, Dockerfiles and shell scripts and rejects data files, large files and oversized commits, commit-msg enforces Conventional Commits, pre-push runs `mvnw verify` | Catch problems locally, keep history parseable for the changelog                   |
 | CI                       | `ci.yml` calls the reusable `verify.yml` on push and PR, cancels superseded runs, least-privilege token                                                 | Fast, safe feedback                                                                |
 | Security scans           | CodeQL, dependency-review, OpenSSF Scorecard, secret scanning, all surfaced in the Security tab                                                         | Catch code and supply-chain issues early                                           |
 | Releases                 | Tag `vX.Y.Z` builds the tagged commit with the version taken from the tag (`pom.xml` stays at 0.0.0), git-cliff release notes, CycloneDX SBOM, SLSA attestations, Boot jar attached to the Release  | Reproducible, auditable releases from commit history                               |
