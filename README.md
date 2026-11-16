@@ -156,3 +156,7 @@ eclipse-formatter.xml  Spotless formatter settings (2-space indent, 150 columns)
 SECURITY.md            security policy
 scripts/init.sh        one-time template initializer (removed after first run)
 ```
+
+## License
+
+Apache-2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
