@@ -71,23 +71,23 @@ The tag starts `release.yml`, see [Workflows](.github/workflows/README.md#workfl
 
 GitHub copies only the files of a template, not its settings or rulesets. Do these steps once, in this order, after `scripts/init.sh`.
 
-| Step | Setting | Where and what to do | Why |
-| --- | --- | --- | --- |
-| 1 | Branch ruleset on `main` | Settings → Rules → Rulesets → New ruleset → New branch ruleset. Name `default`, enforcement status Active, target the default branch. Switch on every rule listed under [Gates on `main`](.github/workflows/README.md#gates-on-main). Type the names of the two required checks exactly as written there | Keeps unreviewed, unsigned or broken code off `main` |
-| 2 | Tag ruleset on `v*` | Same screen, New tag ruleset. Name `release-tags`, enforcement status Active, target the pattern `v*`. Switch on restrict creations, restrict updates and restrict deletions | Releases are tag-driven, without the rule anyone with push access can cut one |
-| 3 | Bypass list of both rulesets | Open each ruleset and add to its Bypass list. In an organisation: Organization admin on both, the Maintain role on `release-tags` as well. Under a personal account: Repository admin on both | A personal account has no organisation admin. Without Repository admin on the list the only maintainer cannot merge their own pull requests, because 1 approval and a code owner review are required, and nobody can push a release tag |
-| 4 | Workflow permissions | Settings → Actions → General → Workflow permissions. Select Read repository contents and packages permissions, leave Allow GitHub Actions to create and approve pull requests unticked | Every workflow declares its own `permissions`, the release workflow requests `contents: write` itself |
-| 5 | Fork PR approval | Settings → Actions → General → Approval for running fork pull request workflows from contributors. Select Require approval for all external contributors | Keeps untrusted fork code from running workflows before a maintainer has looked |
-| 6 | Pull request creation | Settings → General. In the dropdown under Pull requests select Collaborators only | Only people who were given access to the repository can open pull requests |
-| 7 | Merge settings | Settings → General → Pull Requests. Allow squash merging only, default to the pull request title with a blank message, always suggest updating pull request branches, auto-delete head branches | One conventional subject per PR lands on `main`, which is what git-cliff reads for the release notes |
-| 8 | Commit sign-off | Settings → General, require contributors to sign off on web-based commits | Commits made in the browser carry the same attribution as local ones |
-| 9 | Immutable releases | Settings → General → Releases. Select Enable release immutability | A published release and its files cannot be changed afterwards |
-| 10 | Code scanning | Settings → Advanced Security. Keep the CodeQL "Default setup" off, the scan runs from `scan-codeql.yml` | Default setup conflicts with the workflow |
-| 11 | Secret scanning + push protection | Settings → Advanced Security, on by default for public repos | Blocks committed credentials |
-| 12 | Dependabot alerts | Settings → Advanced Security, enable Dependabot alerts and Dependabot security updates | `dependabot.yml` only schedules version updates, the vulnerability alerts and the pull requests that fix them are separate toggles |
-| 13 | Labels | Issues → Labels. Delete `duplicate` and `invalid`, add `critical` (`B60205`, "Blocking release or core functionality") and `minor` (`FEF2C0`, "Low impact issue") | Same triage labels in every repo |
-| 14 | Template toggle | Leave "Template repository" off if this repo was made from the template | Prevents re-templating |
-| 15 | Housekeeping | Settings → General. Set description and topics, untick Wikis and Projects if unused | Discoverability, fewer places for stale content |
+| Setting | Where and what to do | Why |
+| --- | --- | --- |
+| Branch ruleset on `main` | Settings → Rules → Rulesets → New ruleset → New branch ruleset. Name `default`, enforcement status Active, target the default branch. Switch on every rule listed under [Gates on `main`](.github/workflows/README.md#gates-on-main). Type the names of the two required checks exactly as written there | Keeps unreviewed, unsigned or broken code off `main` |
+| Tag ruleset on `v*` | Same screen, New tag ruleset. Name `release-tags`, enforcement status Active, target the pattern `v*`. Switch on restrict creations, restrict updates and restrict deletions | Releases are tag-driven, without the rule anyone with push access can cut one |
+| Bypass list of both rulesets | Open each ruleset and add to its Bypass list. In an organisation: Organization admin on both, the Maintain role on `release-tags` as well. Under a personal account: Repository admin on both | A personal account has no organisation admin. Without Repository admin on the list the only maintainer cannot merge their own pull requests, because 1 approval and a code owner review are required, and nobody can push a release tag |
+| Workflow permissions | Settings → Actions → General → Workflow permissions. Select Read repository contents and packages permissions, leave Allow GitHub Actions to create and approve pull requests unticked | Every workflow declares its own `permissions`, the release workflow requests `contents: write` itself |
+| Fork PR approval | Settings → Actions → General → Approval for running fork pull request workflows from contributors. Select Require approval for all external contributors | Keeps untrusted fork code from running workflows before a maintainer has looked |
+| Pull request creation | Settings → General. In the dropdown under Pull requests select Collaborators only | Only people who were given access to the repository can open pull requests |
+| Merge settings | Settings → General → Pull Requests. Allow squash merging only, default to the pull request title with a blank message, always suggest updating pull request branches, auto-delete head branches | One conventional subject per PR lands on `main`, which is what git-cliff reads for the release notes |
+| Commit sign-off | Settings → General, require contributors to sign off on web-based commits | Commits made in the browser carry the same attribution as local ones |
+| Immutable releases | Settings → General → Releases. Select Enable release immutability | A published release and its files cannot be changed afterwards |
+| Code scanning | Settings → Advanced Security. Keep the CodeQL "Default setup" off, the scan runs from `scan-codeql.yml` | Default setup conflicts with the workflow |
+| Secret scanning + push protection | Settings → Advanced Security, on by default for public repos | Blocks committed credentials |
+| Dependabot alerts | Settings → Advanced Security, enable Dependabot alerts and Dependabot security updates | `dependabot.yml` only schedules version updates, the vulnerability alerts and the pull requests that fix them are separate toggles |
+| Labels | Issues → Labels. Delete `duplicate` and `invalid`, add `critical` (`B60205`, "Blocking release or core functionality") and `minor` (`FEF2C0`, "Low impact issue") | Same triage labels in every repo |
+| Template toggle | Leave "Template repository" off if this repo was made from the template | Prevents re-templating |
+| Housekeeping | Settings → General. Set description and topics, untick Wikis and Projects if unused | Discoverability, fewer places for stale content |
 
 ### Optional branch `dev`
 
@@ -98,7 +98,7 @@ Do this only if features should collect on `dev` before a release lands on `main
    git switch -c dev main
    git push -u origin dev
    ```
-2. Create a second branch ruleset as in step 1 of the table. Name `dev`, target the pattern `dev`, the rules listed for `dev` under [Gates on `main`](.github/workflows/README.md#gates-on-main), the same bypass list as `default`.
+2. Create a second branch ruleset like the ruleset `default` in the table. Name `dev`, target the pattern `dev`, the rules listed for `dev` under [Gates on `main`](.github/workflows/README.md#gates-on-main), the same bypass list as `default`.
 3. Edit the ruleset `default`. Target the pattern `main` instead of the default branch and change the merge method to the one that section names for a repository with `dev`.
 4. Settings → General → Pull Requests. Also allow merge commits.
 5. In `.github/dependabot.yml` add `target-branch: dev` to both entries. Example for the first entry:
